@@ -1,66 +1,70 @@
-import http, { Server } from "http";
-import app from "./app";
-import dotenv from "dotenv";
+import { Server } from "http";
+import mongoose from "mongoose";
+import app from "./app"
+import { envVars } from "./app/config/env";
+import { seedAdmin } from "./app/utils/seedAdmin";
 
-dotenv.config();
+let server: Server;
 
-let server: Server | null = null;
+const startServer = async () => {
+    try {
+        await mongoose.connect(envVars.MONGODB_URI)
+        console.log("connect db");
 
-async function startServer() {
-  try {
-    server = http.createServer(app);
-    server.listen(process.env.PORT, () => {
-      console.log(`🚀 Server is running on port ${process.env.PORT}`);
-    });
+        server = app.listen(5000, () => {
+            console.log(`Server is listening to port http://localhost:5000`)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-    handleProcessEvents();
-  } catch (error) {
-    console.error("❌ Error during server startup:", error);
+
+
+(async () => {
+    await startServer()
+    await seedAdmin()
+})()
+
+
+process.on("unhandledRejection", (err) => {
+    console.log("unhandled rejection detracted .............Server shutting down", err);
+
+    if (server) {
+        server.close(() => {
+            process.exit(1)
+        })
+    }
+
     process.exit(1);
-  }
-}
+});
 
-/**
- 
- * @param {string} signal - The termination signal received.
- */
-async function gracefulShutdown(signal: string) {
-  console.warn(`🔄 Received ${signal}, shutting down gracefully...`);
+process.on("uncaughtException", (err) => {
+    console.log("uncaught exception error........ server is shutting down", err);
+    if (server) {
+        server.close(() => {
+            process.exit(1)
+        })
+    }
+    process.exit(1)
+})
 
-  if (server) {
-    server.close(async () => {
-      console.log("✅ HTTP server closed.");
+process.on("SIGTERM", () => {
+    console.log("SIGTERM signal received .........server shutting down");
+    if (server) {
+        server.close(() => {
+            process.exit(1)
+        })
+    }
+    process.exit(1)
+})
 
-      try {
-        console.log("Server shutdown complete.");
-      } catch (error) {
-        console.error("❌ Error during shutdown:", error);
-      }
-
-      process.exit(0);
-    });
-  } else {
-    process.exit(0);
-  }
-}
-
-/**
- * Handle system signals and unexpected errors.
- */
-function handleProcessEvents() {
-  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
-
-  process.on("uncaughtException", (error) => {
-    console.error("💥 Uncaught Exception:", error);
-    gracefulShutdown("uncaughtException");
-  });
-
-  process.on("unhandledRejection", (reason) => {
-    console.error("💥 Unhandled Rejection:", reason);
-    gracefulShutdown("unhandledRejection");
-  });
-}
-
-// Start the application
-startServer();
+process.on("SIGINT", () => {
+    console.log("SIGINT signal received .........server shutting down");
+    if (server) {
+        server.close(() => {
+            process.exit(1)
+        })
+    }
+    process.exit(1)
+})

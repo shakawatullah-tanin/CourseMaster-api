@@ -1,5 +1,5 @@
 {
-  "name": "next-blog",
+  "name": "coursemaster-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,12 @@
     "start": "node dist/server.js"
   },
   "keywords": [],
-  "author": "Next Level Web Development",
+  "author": "Nayeem Miah",
   "license": "ISC",
   "type": "commonjs",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
@@ -26,6 +27,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",

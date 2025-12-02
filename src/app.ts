@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import notFount from "./app/middlewares/notFound";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import { router } from "./app/routes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
   })
 );
 
+app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("API is running");
