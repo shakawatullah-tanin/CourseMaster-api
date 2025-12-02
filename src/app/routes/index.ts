@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { UserRouter } from '../modules/user/user.route';
+import { AuthRoutes } from '../modules/auth/auth.route';
+import { CourseRoutes } from '../modules/course/course.route';
 
 export const router = Router();
 
@@ -13,10 +15,14 @@ const modelerRouters: IModule[] = [
         path: "/user",
         route: UserRouter
     },
-    // {
-    //     path: "/auth",
-    //     route: AuthRoutes
-    // },
+    {
+        path: "/auth",
+        route: AuthRoutes
+    },
+    {
+        path: "/courses",
+        route: CourseRoutes
+    }
 ];
 
 

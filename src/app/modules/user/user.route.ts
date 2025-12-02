@@ -19,7 +19,7 @@ router.get("/me",
 );
 
 router.get("/all-user",
-    checkAuth(Role.ADMIN, Role.USER),
+    checkAuth(Role.ADMIN),
     UserController.allUser
 )
 router.get("/:id",

@@ -9,8 +9,7 @@ import { User } from "../modules/user/user.model";
 
 export const checkAuth = (...AuthRoutes: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accessToken = req.headers.authorization || req.cookies.accessToken;
-        // console.log(accessToken);
+        const accessToken = req.cookies.accessToken;
 
         if (!accessToken) {
             throw new Error("access token not found")

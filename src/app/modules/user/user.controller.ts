@@ -50,7 +50,7 @@ const singleUser = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: "user created success ✅",
+        message: "user retive success ✅",
         data: result
     })
 })
